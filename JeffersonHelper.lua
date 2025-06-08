@@ -430,20 +430,7 @@ end
 function main()
     loadInvites()
     sampRegisterChatCommand('jmenu', function() WinState[0] = not WinState[0] end)
-    for _, b in ipairs(invitedData.binders or {}) do
-        if b.command ~= "" then
-            sampRegisterChatCommand(b.command, function()
-                local chats = {}
-                if b.chats["/r"] then table.insert(chats, "/r") end
-                if b.chats["/vr"] then table.insert(chats, "/vr") end
-                if b.chats["/jb"] then table.insert(chats, "/jb") end
-                for _, chat in ipairs(chats) do
-                    sampSendChat(chat .. " " .. (b.text or ""))
-                    wait(1000)
-                end
-            end)
-        end
-    end
+      sampAddChatMessage("{FFFF00}Скрипт JeffersonNorma: {00FF00}Версия 1.1", -1)
     sampAddChatMessage("{FFFF00}Скрипт JeffersonNorma: {00FF00}загружена!", -1)
     sampAddChatMessage("{FFFF00}Команда для запуска: {00FF00}/jmenu", -1)
     sampAddChatMessage("{FFFF00}Автор скрипта: {00FF00}Romeo_Fray", -1)

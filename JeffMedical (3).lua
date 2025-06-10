@@ -32,7 +32,7 @@ local invitedData = {
     checksum = ""
 }
 
--- Функция для обрезки пробелов
+-- Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї Г®ГЎГ°ГҐГ§ГЄГЁ ГЇГ°Г®ГЎГҐГ«Г®Гў
 local function trim(str)
     return str and str:match("^%s*(.-)%s*$") or ""
 end
@@ -102,7 +102,7 @@ local function loadInvites()
             if verifyData(data) then
                 invitedData = data
             else
-                sampAddChatMessage("{FF0000}Обнаружено изменение JSON-файла! Данные сброшены.", -1)
+                sampAddChatMessage("{FF0000}ГЋГЎГ­Г Г°ГіГ¦ГҐГ­Г® ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГҐ JSON-ГґГ Г©Г«Г ! Г„Г Г­Г­Г»ГҐ Г±ГЎГ°Г®ГёГҐГ­Г».", -1)
                 invitedData = {
                     count = 0,
                     players = {},
@@ -151,8 +151,8 @@ local allowedLeaders = {
 }
 
 function samp.onServerMessage(color, text)
-    -- Обработка приглашений
-    local invited_nick = text:match("([^,%s]+) принял ваше предложение вступить к вам в организацию%.")
+    -- ГЋГЎГ°Г ГЎГ®ГІГЄГ  ГЇГ°ГЁГЈГ«Г ГёГҐГ­ГЁГ©
+    local invited_nick = text:match("([^,%s]+) ГЇГ°ГЁГ­ГїГ« ГўГ ГёГҐ ГЇГ°ГҐГ¤Г«Г®Г¦ГҐГ­ГЁГҐ ГўГ±ГІГіГЇГЁГІГј ГЄ ГўГ Г¬ Гў Г®Г°ГЈГ Г­ГЁГ§Г Г¶ГЁГѕ%.")
     if invited_nick then
         invited_nick = invited_nick:gsub("{%x%x%x%x%x%x}", "")
         if not table.hasPlayer(invitedData.players, invited_nick) then
@@ -162,12 +162,12 @@ function samp.onServerMessage(color, text)
             })
             invitedData.count = invitedData.count + 1
             saveInvites()
-            sampAddChatMessage("{00FF00}Ты пригласил игрока: " .. invited_nick .. ". Всего приглашено: " .. invitedData.count, -1)
+            sampAddChatMessage("{00FF00}Г’Г» ГЇГ°ГЁГЈГ«Г Г±ГЁГ« ГЁГЈГ°Г®ГЄГ : " .. invited_nick .. ". Г‚Г±ГҐГЈГ® ГЇГ°ГЁГЈГ«Г ГёГҐГ­Г®: " .. invitedData.count, -1)
         end
     end
 
-    -- Обработка покупки ранга
-    local rank_nick, price = text:match("Игрок ([^%(]+)%(%d+%) принял покупку ранга за $(%d+[,%d+]*)%.")
+    -- ГЋГЎГ°Г ГЎГ®ГІГЄГ  ГЇГ®ГЄГіГЇГЄГЁ Г°Г Г­ГЈГ 
+    local rank_nick, price = text:match("Г€ГЈГ°Г®ГЄ ([^%(]+)%(%d+%) ГЇГ°ГЁГ­ГїГ« ГЇГ®ГЄГіГЇГЄГі Г°Г Г­ГЈГ  Г§Г  $(%d+[,%d+]*)%.")
     if rank_nick and price then
         rank_nick = rank_nick:gsub("{%x%x%x%x%x%x}", "")
         price = price:gsub(",", "")
@@ -178,20 +178,20 @@ function samp.onServerMessage(color, text)
                 price = price
             })
             saveInvites()
-            sampAddChatMessage("{00FF00}Игрок " .. rank_nick .. " купил ранг за $" .. price, -1)
+            sampAddChatMessage("{00FF00}Г€ГЈГ°Г®ГЄ " .. rank_nick .. " ГЄГіГЇГЁГ« Г°Г Г­ГЈ Г§Г  $" .. price, -1)
         end
     end
 
-    -- Проверка на сообщение установки нормы
-    local normNick, normValue = text:match("([%w_]+) установил всем замам норму в размере (%d+) инвайтов")
+    -- ГЏГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ ГіГ±ГІГ Г­Г®ГўГЄГЁ Г­Г®Г°Г¬Г»
+    local normNick, normValue = text:match("([%w_]+) ГіГ±ГІГ Г­Г®ГўГЁГ« ГўГ±ГҐГ¬ Г§Г Г¬Г Г¬ Г­Г®Г°Г¬Гі Гў Г°Г Г§Г¬ГҐГ°ГҐ (%d+) ГЁГ­ГўГ Г©ГІГ®Гў")
     if normNick and normValue then
         invitedData.inviteNorma = tonumber(normValue)
         saveInvites()
-        sampAddChatMessage("{00FFAA}Установлена норма: " .. normValue, -1)
+        sampAddChatMessage("{00FFAA}Г“Г±ГІГ Г­Г®ГўГ«ГҐГ­Г  Г­Г®Г°Г¬Г : " .. normValue, -1)
     end
 end
 
--- Команда для установки нормы
+-- ГЉГ®Г¬Г Г­Г¤Г  Г¤Г«Гї ГіГ±ГІГ Г­Г®ГўГЄГЁ Г­Г®Г°Г¬Г»
 sampRegisterChatCommand("setnorma", function(amount)
     local norm = tonumber(amount)
     if norm then
@@ -200,12 +200,12 @@ sampRegisterChatCommand("setnorma", function(amount)
         if allowedLeaders[nickname] then
             invitedData.inviteNorma = norm
             saveInvites()
-            sampSendChat(string.format("/rb %s установил всем замам норму в размере %d инвайтов", nickname, norm))
+            sampSendChat(string.format("/rb %s ГіГ±ГІГ Г­Г®ГўГЁГ« ГўГ±ГҐГ¬ Г§Г Г¬Г Г¬ Г­Г®Г°Г¬Гі Гў Г°Г Г§Г¬ГҐГ°ГҐ %d ГЁГ­ГўГ Г©ГІГ®Гў", nickname, norm))
         else
-            sampAddChatMessage("{FF0000}Ты не лидер и не можешь устанавливать норму!", -1)
+            sampAddChatMessage("{FF0000}Г’Г» Г­ГҐ Г«ГЁГ¤ГҐГ° ГЁ Г­ГҐ Г¬Г®Г¦ГҐГёГј ГіГ±ГІГ Г­Г ГўГ«ГЁГўГ ГІГј Г­Г®Г°Г¬Гі!", -1)
         end
     else
-        sampAddChatMessage("Используй: /setnorma [число]", 0xFF0000)
+        sampAddChatMessage("Г€Г±ГЇГ®Г«ГјГ§ГіГ©: /setnorma [Г·ГЁГ±Г«Г®]", 0xFF0000)
     end
 end)
 
@@ -220,42 +220,42 @@ imgui.OnFrame(
         imgui.Begin(u8"JeffersonNorma", WinState, imgui.WindowFlags.NoResize)
         imgui.BeginChild("LeftPanel", imgui.ImVec2(150, 0), true)
         imgui.SetCursorPosX(12)
-        if imgui.Button(u8"Главное меню", imgui.ImVec2(130, 40)) then selectedTab[0] = 0 end
+        if imgui.Button(u8"ГѓГ«Г ГўГ­Г®ГҐ Г¬ГҐГ­Гѕ", imgui.ImVec2(130, 40)) then selectedTab[0] = 0 end
         imgui.SetCursorPosX(12)
-        if imgui.Button(u8"Инвайты", imgui.ImVec2(130, 40)) then selectedTab[0] = 1 end
+        if imgui.Button(u8"Г€Г­ГўГ Г©ГІГ»", imgui.ImVec2(130, 40)) then selectedTab[0] = 1 end
         imgui.SetCursorPosX(12)
-        if imgui.Button(u8"Продажа ранга", imgui.ImVec2(130, 40)) then selectedTab[0] = 2 end
+        if imgui.Button(u8"ГЏГ°Г®Г¤Г Г¦Г  Г°Г Г­ГЈГ ", imgui.ImVec2(130, 40)) then selectedTab[0] = 2 end
         imgui.SetCursorPosX(12)
-        if imgui.Button(u8"Устав", imgui.ImVec2(130, 40)) then selectedTab[0] = 3 end
+        if imgui.Button(u8"Г“Г±ГІГ Гў", imgui.ImVec2(130, 40)) then selectedTab[0] = 3 end
         imgui.SetCursorPosX(12)
-        if imgui.Button(u8"Ценовая политика", imgui.ImVec2(130, 40)) then selectedTab[0] = 4 end
+        if imgui.Button(u8"Г–ГҐГ­Г®ГўГ Гї ГЇГ®Г«ГЁГІГЁГЄГ ", imgui.ImVec2(130, 40)) then selectedTab[0] = 4 end
         imgui.SetCursorPosX(12)
         imgui.EndChild()
         imgui.SameLine()
         imgui.BeginChild("ContentPanel", imgui.ImVec2(0, 0), true)
         if selectedTab[0] == 0 then
-            imgui.CenterText(u8"Информация про сотрудника")
+            imgui.CenterText(u8"Г€Г­ГґГ®Г°Г¬Г Г¶ГЁГї ГЇГ°Г® Г±Г®ГІГ°ГіГ¤Г­ГЁГЄГ ")
             imgui.Separator()
-            imgui.Text(u8"Имя и фамилия: "..playerName)
+            imgui.Text(u8"Г€Г¬Гї ГЁ ГґГ Г¬ГЁГ«ГЁГї: "..playerName)
             imgui.Separator()
-            imgui.Text(u8"Всего пригласил игроков: " .. invitedData.count .. "/" .. invitedData.inviteNorma)
+            imgui.Text(u8"Г‚Г±ГҐГЈГ® ГЇГ°ГЁГЈГ«Г Г±ГЁГ« ГЁГЈГ°Г®ГЄГ®Гў: " .. invitedData.count .. "/" .. invitedData.inviteNorma)
             if invitedData.count >= invitedData.inviteNorma and invitedData.inviteNorma > 0 then
-                imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"Норма выполнена")
+                imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"ГЌГ®Г°Г¬Г  ГўГ»ГЇГ®Г«Г­ГҐГ­Г ")
             end
             imgui.Separator()
-            imgui.Text(u8"Общее кол-во проданных рангов: "..#invitedData.rankPurchases)
+            imgui.Text(u8"ГЋГЎГ№ГҐГҐ ГЄГ®Г«-ГўГ® ГЇГ°Г®Г¤Г Г­Г­Г»Гµ Г°Г Г­ГЈГ®Гў: "..#invitedData.rankPurchases)
             imgui.Separator()
-            imgui.Text(u8"Общая сумма проданных рангов: $" .. formatWithCommas(getTotalRankPurchaseAmount()))
+            imgui.Text(u8"ГЋГЎГ№Г Гї Г±ГіГ¬Г¬Г  ГЇГ°Г®Г¤Г Г­Г­Г»Гµ Г°Г Г­ГЈГ®Гў: $" .. formatWithCommas(getTotalRankPurchaseAmount()))
             imgui.Separator()
         elseif selectedTab[0] == 1 then
             imgui.SetNextItemWidth(400)
-            imgui.InputText(u8"Поиск игрока", searchText, 256)
+            imgui.InputText(u8"ГЏГ®ГЁГ±ГЄ ГЁГЈГ°Г®ГЄГ ", searchText, 256)
             imgui.Separator()
-            imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"Всего приглашено: " .. invitedData.count)
+            imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"Г‚Г±ГҐГЈГ® ГЇГ°ГЁГЈГ«Г ГёГҐГ­Г®: " .. invitedData.count)
             imgui.Separator()
             local searchQuery = u8:decode(ffi.string(searchText)):lower()
             if #invitedData.players == 0 then
-                imgui.TextColored(imgui.ImVec4(1, 0.5, 0.5, 1), u8"Нет приглашённых игроков.")
+                imgui.TextColored(imgui.ImVec4(1, 0.5, 0.5, 1), u8"ГЌГҐГІ ГЇГ°ГЁГЈГ«Г ГёВёГ­Г­Г»Гµ ГЁГЈГ°Г®ГЄГ®Гў.")
             else
                 for i, p in ipairs(invitedData.players) do
                     if searchQuery == "" or p.name:lower():find(searchQuery) then
@@ -266,14 +266,14 @@ imgui.OnFrame(
             end
         elseif selectedTab[0] == 2 then
             imgui.SetNextItemWidth(400)
-            imgui.InputText(u8"Поиск игрока", searchText, 256)
+            imgui.InputText(u8"ГЏГ®ГЁГ±ГЄ ГЁГЈГ°Г®ГЄГ ", searchText, 256)
             imgui.Separator()
-            imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"Всего покупок ранга: " .. #invitedData.rankPurchases)
-            imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"Общая сумма: $" .. formatWithCommas(getTotalRankPurchaseAmount()))
+            imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"Г‚Г±ГҐГЈГ® ГЇГ®ГЄГіГЇГ®ГЄ Г°Г Г­ГЈГ : " .. #invitedData.rankPurchases)
+            imgui.TextColored(imgui.ImVec4(0.2, 1.0, 0.2, 1.0), u8"ГЋГЎГ№Г Гї Г±ГіГ¬Г¬Г : $" .. formatWithCommas(getTotalRankPurchaseAmount()))
             imgui.Separator()
             local searchQuery = u8:decode(ffi.string(searchText)):lower()
             if #invitedData.rankPurchases == 0 then
-                imgui.TextColored(imgui.ImVec4(1, 0.5, 0.5, 1), u8"Нет покупок ранга.")
+                imgui.TextColored(imgui.ImVec4(1, 0.5, 0.5, 1), u8"ГЌГҐГІ ГЇГ®ГЄГіГЇГ®ГЄ Г°Г Г­ГЈГ .")
             else
                 for i, p in ipairs(invitedData.rankPurchases) do
                     if searchQuery == "" or p.name:lower():find(searchQuery) then
@@ -283,120 +283,120 @@ imgui.OnFrame(
                 end
             end
         elseif selectedTab[0] == 3 then
-            if imgui.CollapsingHeader(u8"1. Иерархия больницы") then
-                imgui.TextWrapped(u8"Должности (от высшего к низшему):")
-                imgui.BulletText(u8"Администратор")
-                imgui.BulletText(u8"Владелец(ы)")
-                imgui.BulletText(u8"Главный врач")
-                imgui.BulletText(u8"Куратор")
-                imgui.BulletText(u8"Заместители куратора")
-                imgui.BulletText(u8"Заместитель больницы")
-                imgui.TextWrapped(u8"1.1 Человек на низшей должности обязан подчиняться вышестоящему по должности.")
+            if imgui.CollapsingHeader(u8"1. Г€ГҐГ°Г Г°ГµГЁГї ГЎГ®Г«ГјГ­ГЁГ¶Г»") then
+                imgui.TextWrapped(u8"Г„Г®Г«Г¦Г­Г®Г±ГІГЁ (Г®ГІ ГўГ»Г±ГёГҐГЈГ® ГЄ Г­ГЁГ§ГёГҐГ¬Гі):")
+                imgui.BulletText(u8"ГЂГ¤Г¬ГЁГ­ГЁГ±ГІГ°Г ГІГ®Г°")
+                imgui.BulletText(u8"Г‚Г«Г Г¤ГҐГ«ГҐГ¶(Г»)")
+                imgui.BulletText(u8"ГѓГ«Г ГўГ­Г»Г© ГўГ°Г Г·")
+                imgui.BulletText(u8"ГЉГіГ°Г ГІГ®Г°")
+                imgui.BulletText(u8"Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«ГЁ ГЄГіГ°Г ГІГ®Г°Г ")
+                imgui.BulletText(u8"Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«Гј ГЎГ®Г«ГјГ­ГЁГ¶Г»")
+                imgui.TextWrapped(u8"1.1 Г—ГҐГ«Г®ГўГҐГЄ Г­Г  Г­ГЁГ§ГёГҐГ© Г¤Г®Г«Г¦Г­Г®Г±ГІГЁ Г®ГЎГїГ§Г Г­ ГЇГ®Г¤Г·ГЁГ­ГїГІГјГ±Гї ГўГ»ГёГҐГ±ГІГ®ГїГ№ГҐГ¬Гі ГЇГ® Г¤Г®Г«Г¦Г­Г®Г±ГІГЁ.")
             end
-            if imgui.CollapsingHeader(u8"2. Автопарк больницы") then
-                imgui.TextWrapped(u8"2.1 Спавнить автомобили по просьбам 6+ ранга — обязательно.")
-                imgui.TextWrapped(u8"2.2 Спавнить автомобили по просьбам 1-5 рангов — на усмотрение, но не желательно.")
-                imgui.TextWrapped(u8"2.3 Смена ранга доступа к автомобилю без согласия руководства — ЗАПРЕЩЕНА.")
+            if imgui.CollapsingHeader(u8"2. ГЂГўГІГ®ГЇГ Г°ГЄ ГЎГ®Г«ГјГ­ГЁГ¶Г»") then
+                imgui.TextWrapped(u8"2.1 Г‘ГЇГ ГўГ­ГЁГІГј Г ГўГІГ®Г¬Г®ГЎГЁГ«ГЁ ГЇГ® ГЇГ°Г®Г±ГјГЎГ Г¬ 6+ Г°Г Г­ГЈГ  В— Г®ГЎГїГ§Г ГІГҐГ«ГјГ­Г®.")
+                imgui.TextWrapped(u8"2.2 Г‘ГЇГ ГўГ­ГЁГІГј Г ГўГІГ®Г¬Г®ГЎГЁГ«ГЁ ГЇГ® ГЇГ°Г®Г±ГјГЎГ Г¬ 1-5 Г°Г Г­ГЈГ®Гў В— Г­Г  ГіГ±Г¬Г®ГІГ°ГҐГ­ГЁГҐ, Г­Г® Г­ГҐ Г¦ГҐГ«Г ГІГҐГ«ГјГ­Г®.")
+                imgui.TextWrapped(u8"2.3 Г‘Г¬ГҐГ­Г  Г°Г Г­ГЈГ  Г¤Г®Г±ГІГіГЇГ  ГЄ Г ГўГІГ®Г¬Г®ГЎГЁГ«Гѕ ГЎГҐГ§ Г±Г®ГЈГ«Г Г±ГЁГї Г°ГіГЄГ®ГўГ®Г¤Г±ГІГўГ  В— Г‡ГЂГЏГђГ…Г™Г…ГЌГЂ.")
             end
-            if imgui.CollapsingHeader(u8"4. Базовые команды руководителя") then
-                imgui.BulletText(u8"/invite — принять в орг.")
-                imgui.BulletText(u8"/giverank — установить ранг")
-                imgui.BulletText(u8"/settag — установить тег")
-                imgui.BulletText(u8"/fwarn — выдать выговор")
-                imgui.BulletText(u8"/unfwarn — снятие выговора")
-                imgui.BulletText(u8"/blacklist — черный список (Док-ва нарушения)")
-                imgui.BulletText(u8"/unblacklist — снятие выговора")
-                imgui.BulletText(u8"/fmute — выдача мута")
-                imgui.BulletText(u8"/unfmute — снятие мута")
-                imgui.BulletText(u8"/lmenu — лидерская информация")
-                imgui.BulletText(u8"/uninvite — уволить человека")
+            if imgui.CollapsingHeader(u8"4. ГЃГ Г§Г®ГўГ»ГҐ ГЄГ®Г¬Г Г­Г¤Г» Г°ГіГЄГ®ГўГ®Г¤ГЁГІГҐГ«Гї") then
+                imgui.BulletText(u8"/invite В— ГЇГ°ГЁГ­ГїГІГј Гў Г®Г°ГЈ.")
+                imgui.BulletText(u8"/giverank В— ГіГ±ГІГ Г­Г®ГўГЁГІГј Г°Г Г­ГЈ")
+                imgui.BulletText(u8"/settag В— ГіГ±ГІГ Г­Г®ГўГЁГІГј ГІГҐГЈ")
+                imgui.BulletText(u8"/fwarn В— ГўГ»Г¤Г ГІГј ГўГ»ГЈГ®ГўГ®Г°")
+                imgui.BulletText(u8"/unfwarn В— Г±Г­ГїГІГЁГҐ ГўГ»ГЈГ®ГўГ®Г°Г ")
+                imgui.BulletText(u8"/blacklist В— Г·ГҐГ°Г­Г»Г© Г±ГЇГЁГ±Г®ГЄ (Г„Г®ГЄ-ГўГ  Г­Г Г°ГіГёГҐГ­ГЁГї)")
+                imgui.BulletText(u8"/unblacklist В— Г±Г­ГїГІГЁГҐ ГўГ»ГЈГ®ГўГ®Г°Г ")
+                imgui.BulletText(u8"/fmute В— ГўГ»Г¤Г Г·Г  Г¬ГіГІГ ")
+                imgui.BulletText(u8"/unfmute В— Г±Г­ГїГІГЁГҐ Г¬ГіГІГ ")
+                imgui.BulletText(u8"/lmenu В— Г«ГЁГ¤ГҐГ°Г±ГЄГ Гї ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї")
+                imgui.BulletText(u8"/uninvite В— ГіГўГ®Г«ГЁГІГј Г·ГҐГ«Г®ГўГҐГЄГ ")
             end
-            if imgui.CollapsingHeader(u8"5. Наказания состава больницы 1-8 ранги") then
-                imgui.TextWrapped(u8"5.1 ОСК. Руководящего состава. (Выговор)")
-                imgui.TextWrapped(u8"5.2 Неадекватное поведение в рабочем чате (Мут 60-300 минут, вплоть до увольнения)")
-                imgui.TextWrapped(u8"5.3 ОСК/упом родни (Кик с ЧС)")
-                imgui.TextWrapped(u8"5.4 Неактив 5+ дней (Проверить в /lmenu, исключение — покупные ранги 15+ дней)")
+            if imgui.CollapsingHeader(u8"5. ГЌГ ГЄГ Г§Г Г­ГЁГї Г±Г®Г±ГІГ ГўГ  ГЎГ®Г«ГјГ­ГЁГ¶Г» 1-8 Г°Г Г­ГЈГЁ") then
+                imgui.TextWrapped(u8"5.1 ГЋГ‘ГЉ. ГђГіГЄГ®ГўГ®Г¤ГїГ№ГҐГЈГ® Г±Г®Г±ГІГ ГўГ . (Г‚Г»ГЈГ®ГўГ®Г°)")
+                imgui.TextWrapped(u8"5.2 ГЌГҐГ Г¤ГҐГЄГўГ ГІГ­Г®ГҐ ГЇГ®ГўГҐГ¤ГҐГ­ГЁГҐ Гў Г°Г ГЎГ®Г·ГҐГ¬ Г·Г ГІГҐ (ГЊГіГІ 60-300 Г¬ГЁГ­ГіГІ, ГўГЇГ«Г®ГІГј Г¤Г® ГіГўГ®Г«ГјГ­ГҐГ­ГЁГї)")
+                imgui.TextWrapped(u8"5.3 ГЋГ‘ГЉ/ГіГЇГ®Г¬ Г°Г®Г¤Г­ГЁ (ГЉГЁГЄ Г± Г—Г‘)")
+                imgui.TextWrapped(u8"5.4 ГЌГҐГ ГЄГІГЁГў 5+ Г¤Г­ГҐГ© (ГЏГ°Г®ГўГҐГ°ГЁГІГј Гў /lmenu, ГЁГ±ГЄГ«ГѕГ·ГҐГ­ГЁГҐ В— ГЇГ®ГЄГіГЇГ­Г»ГҐ Г°Г Г­ГЈГЁ 15+ Г¤Г­ГҐГ©)")
             end
-            if imgui.CollapsingHeader(u8"6. Обязанности Лидера/Куратора/Заместителей больницы") then
-                imgui.TextWrapped(u8"Лидер:")
-                imgui.BulletText(u8"6.1.1 Лидер обязан проявлять актив по улучшению больницы")
-                imgui.BulletText(u8"6.1.2 Лидер не отвечает за Заместителей больницы")
-                imgui.BulletText(u8"6.1.3 Лидер обязан следить за куратором больницы")
-                imgui.BulletText(u8"6.1.4 Лидер — это лицо больницы, он должен быть адекватным, отзывчивым")
-                imgui.BulletText(u8"6.1.5 Лидер получает 15% с проданного им ранга")
-                imgui.TextWrapped(u8"Куратор:")
-                imgui.BulletText(u8"6.2.1 Куратор больницы должен решать любые проблемы по мере их поступления")
-                imgui.BulletText(u8"6.2.2 Куратор не подчиняется заместителям больницы")
-                imgui.BulletText(u8"6.2.3 Куратор полностью отвечает за заместителей")
-                imgui.BulletText(u8"6.2.4 Куратор вправе выдавать выговоры заместителям")
-                imgui.BulletText(u8"6.2.5 Куратор получает 10% с проданного им ранга")
-                imgui.TextWrapped(u8"Заместитель больницы:")
-                imgui.BulletText(u8"6.3.1 Заместитель должен подчиняться вышестоящим по должности (Куратор, Лидер, Владелец, Администратор)")
-                imgui.BulletText(u8"6.3.2 Заместитель может получить штраф от куратора и лидера по следующим причинам:")
+            if imgui.CollapsingHeader(u8"6. ГЋГЎГїГ§Г Г­Г­Г®Г±ГІГЁ Г‹ГЁГ¤ГҐГ°Г /ГЉГіГ°Г ГІГ®Г°Г /Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«ГҐГ© ГЎГ®Г«ГјГ­ГЁГ¶Г»") then
+                imgui.TextWrapped(u8"Г‹ГЁГ¤ГҐГ°:")
+                imgui.BulletText(u8"6.1.1 Г‹ГЁГ¤ГҐГ° Г®ГЎГїГ§Г Г­ ГЇГ°Г®ГїГўГ«ГїГІГј Г ГЄГІГЁГў ГЇГ® ГіГ«ГіГ·ГёГҐГ­ГЁГѕ ГЎГ®Г«ГјГ­ГЁГ¶Г»")
+                imgui.BulletText(u8"6.1.2 Г‹ГЁГ¤ГҐГ° Г­ГҐ Г®ГІГўГҐГ·Г ГҐГІ Г§Г  Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«ГҐГ© ГЎГ®Г«ГјГ­ГЁГ¶Г»")
+                imgui.BulletText(u8"6.1.3 Г‹ГЁГ¤ГҐГ° Г®ГЎГїГ§Г Г­ Г±Г«ГҐГ¤ГЁГІГј Г§Г  ГЄГіГ°Г ГІГ®Г°Г®Г¬ ГЎГ®Г«ГјГ­ГЁГ¶Г»")
+                imgui.BulletText(u8"6.1.4 Г‹ГЁГ¤ГҐГ° В— ГЅГІГ® Г«ГЁГ¶Г® ГЎГ®Г«ГјГ­ГЁГ¶Г», Г®Г­ Г¤Г®Г«Г¦ГҐГ­ ГЎГ»ГІГј Г Г¤ГҐГЄГўГ ГІГ­Г»Г¬, Г®ГІГ§Г»ГўГ·ГЁГўГ»Г¬")
+                imgui.BulletText(u8"6.1.5 Г‹ГЁГ¤ГҐГ° ГЇГ®Г«ГіГ·Г ГҐГІ 15% Г± ГЇГ°Г®Г¤Г Г­Г­Г®ГЈГ® ГЁГ¬ Г°Г Г­ГЈГ ")
+                imgui.TextWrapped(u8"ГЉГіГ°Г ГІГ®Г°:")
+                imgui.BulletText(u8"6.2.1 ГЉГіГ°Г ГІГ®Г° ГЎГ®Г«ГјГ­ГЁГ¶Г» Г¤Г®Г«Г¦ГҐГ­ Г°ГҐГёГ ГІГј Г«ГѕГЎГ»ГҐ ГЇГ°Г®ГЎГ«ГҐГ¬Г» ГЇГ® Г¬ГҐГ°ГҐ ГЁГµ ГЇГ®Г±ГІГіГЇГ«ГҐГ­ГЁГї")
+                imgui.BulletText(u8"6.2.2 ГЉГіГ°Г ГІГ®Г° Г­ГҐ ГЇГ®Г¤Г·ГЁГ­ГїГҐГІГ±Гї Г§Г Г¬ГҐГ±ГІГЁГІГҐГ«ГїГ¬ ГЎГ®Г«ГјГ­ГЁГ¶Г»")
+                imgui.BulletText(u8"6.2.3 ГЉГіГ°Г ГІГ®Г° ГЇГ®Г«Г­Г®Г±ГІГјГѕ Г®ГІГўГҐГ·Г ГҐГІ Г§Г  Г§Г Г¬ГҐГ±ГІГЁГІГҐГ«ГҐГ©")
+                imgui.BulletText(u8"6.2.4 ГЉГіГ°Г ГІГ®Г° ГўГЇГ°Г ГўГҐ ГўГ»Г¤Г ГўГ ГІГј ГўГ»ГЈГ®ГўГ®Г°Г» Г§Г Г¬ГҐГ±ГІГЁГІГҐГ«ГїГ¬")
+                imgui.BulletText(u8"6.2.5 ГЉГіГ°Г ГІГ®Г° ГЇГ®Г«ГіГ·Г ГҐГІ 10% Г± ГЇГ°Г®Г¤Г Г­Г­Г®ГЈГ® ГЁГ¬ Г°Г Г­ГЈГ ")
+                imgui.TextWrapped(u8"Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«Гј ГЎГ®Г«ГјГ­ГЁГ¶Г»:")
+                imgui.BulletText(u8"6.3.1 Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«Гј Г¤Г®Г«Г¦ГҐГ­ ГЇГ®Г¤Г·ГЁГ­ГїГІГјГ±Гї ГўГ»ГёГҐГ±ГІГ®ГїГ№ГЁГ¬ ГЇГ® Г¤Г®Г«Г¦Г­Г®Г±ГІГЁ (ГЉГіГ°Г ГІГ®Г°, Г‹ГЁГ¤ГҐГ°, Г‚Г«Г Г¤ГҐГ«ГҐГ¶, ГЂГ¤Г¬ГЁГ­ГЁГ±ГІГ°Г ГІГ®Г°)")
+                imgui.BulletText(u8"6.3.2 Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«Гј Г¬Г®Г¦ГҐГІ ГЇГ®Г«ГіГ·ГЁГІГј ГёГІГ°Г Гґ Г®ГІ ГЄГіГ°Г ГІГ®Г°Г  ГЁ Г«ГЁГ¤ГҐГ°Г  ГЇГ® Г±Г«ГҐГ¤ГіГѕГ№ГЁГ¬ ГЇГ°ГЁГ·ГЁГ­Г Г¬:")
                 imgui.Indent(10)
-                imgui.TextWrapped(u8"- Неподчинение вышестоящему по должности (выговор)")
-                imgui.TextWrapped(u8"- Оскорбление игрока/неадекват (штраф 10-50кк (на усмотрение))")
-                imgui.TextWrapped(u8"- Наказание от администрации (штраф 30кк)")
-                imgui.TextWrapped(u8"- Неучастие в деятельности больницы более 2-х недель без уважительной причины (снятие)")
+                imgui.TextWrapped(u8"- ГЌГҐГЇГ®Г¤Г·ГЁГ­ГҐГ­ГЁГҐ ГўГ»ГёГҐГ±ГІГ®ГїГ№ГҐГ¬Гі ГЇГ® Г¤Г®Г«Г¦Г­Г®Г±ГІГЁ (ГўГ»ГЈГ®ГўГ®Г°)")
+                imgui.TextWrapped(u8"- ГЋГ±ГЄГ®Г°ГЎГ«ГҐГ­ГЁГҐ ГЁГЈГ°Г®ГЄГ /Г­ГҐГ Г¤ГҐГЄГўГ ГІ (ГёГІГ°Г Гґ 10-50ГЄГЄ (Г­Г  ГіГ±Г¬Г®ГІГ°ГҐГ­ГЁГҐ))")
+                imgui.TextWrapped(u8"- ГЌГ ГЄГ Г§Г Г­ГЁГҐ Г®ГІ Г Г¤Г¬ГЁГ­ГЁГ±ГІГ°Г Г¶ГЁГЁ (ГёГІГ°Г Гґ 30ГЄГЄ)")
+                imgui.TextWrapped(u8"- ГЌГҐГіГ·Г Г±ГІГЁГҐ Гў Г¤ГҐГїГІГҐГ«ГјГ­Г®Г±ГІГЁ ГЎГ®Г«ГјГ­ГЁГ¶Г» ГЎГ®Г«ГҐГҐ 2-Гµ Г­ГҐГ¤ГҐГ«Гј ГЎГҐГ§ ГіГўГ Г¦ГЁГІГҐГ«ГјГ­Г®Г© ГЇГ°ГЁГ·ГЁГ­Г» (Г±Г­ГїГІГЁГҐ)")
                 imgui.Unindent(10)
             end
-            if imgui.CollapsingHeader(u8"10. Увольнение и восстановление") then
-                imgui.TextWrapped(u8"9.1 Человек на покупном ранге, уволенный СИСТЕМНО по причинам:")
-                imgui.BulletText(u8"Отсутствие жилья")
-                imgui.BulletText(u8"Варн/бан по вине игрока")
-                imgui.BulletText(u8"Случайно уволился через /out")
-                imgui.TextWrapped(u8"НЕ ВОССТАНАВЛИВАЕТСЯ! (Исключения: На усмотрение владельцев и лидера)")
-                imgui.TextWrapped(u8"9.2 При увольнении игрока 6-го ранга по причинам:")
-                imgui.BulletText(u8"Отсутствие жилья")
-                imgui.BulletText(u8"Увольнение со стороны ФБР")
-                imgui.BulletText(u8"Варн/бан по вине и ошибке админа")
-                imgui.TextWrapped(u8"ВОССТАНАВЛИВАЕТСЯ НА ДОЛЖНОСТЬ.")
-                imgui.TextWrapped(u8"9.3 Если наказание выдано по ошибке администратора и сотрудник, уволенный системой, смог это доказать — восстанавливаем.")
-                imgui.TextWrapped(u8"9.4 Если по нарушению игрока он получил наказание — ранг не восстанавливается.")
+            if imgui.CollapsingHeader(u8"10. Г“ГўГ®Г«ГјГ­ГҐГ­ГЁГҐ ГЁ ГўГ®Г±Г±ГІГ Г­Г®ГўГ«ГҐГ­ГЁГҐ") then
+                imgui.TextWrapped(u8"9.1 Г—ГҐГ«Г®ГўГҐГЄ Г­Г  ГЇГ®ГЄГіГЇГ­Г®Г¬ Г°Г Г­ГЈГҐ, ГіГўГ®Г«ГҐГ­Г­Г»Г© Г‘Г€Г‘Г’Г…ГЊГЌГЋ ГЇГ® ГЇГ°ГЁГ·ГЁГ­Г Г¬:")
+                imgui.BulletText(u8"ГЋГІГ±ГіГІГ±ГІГўГЁГҐ Г¦ГЁГ«ГјГї")
+                imgui.BulletText(u8"Г‚Г Г°Г­/ГЎГ Г­ ГЇГ® ГўГЁГ­ГҐ ГЁГЈГ°Г®ГЄГ ")
+                imgui.BulletText(u8"Г‘Г«ГіГ·Г Г©Г­Г® ГіГўГ®Г«ГЁГ«Г±Гї Г·ГҐГ°ГҐГ§ /out")
+                imgui.TextWrapped(u8"ГЌГ… Г‚ГЋГ‘Г‘Г’ГЂГЌГЂГ‚Г‹Г€Г‚ГЂГ…Г’Г‘Гџ! (Г€Г±ГЄГ«ГѕГ·ГҐГ­ГЁГї: ГЌГ  ГіГ±Г¬Г®ГІГ°ГҐГ­ГЁГҐ ГўГ«Г Г¤ГҐГ«ГјГ¶ГҐГў ГЁ Г«ГЁГ¤ГҐГ°Г )")
+                imgui.TextWrapped(u8"9.2 ГЏГ°ГЁ ГіГўГ®Г«ГјГ­ГҐГ­ГЁГЁ ГЁГЈГ°Г®ГЄГ  6-ГЈГ® Г°Г Г­ГЈГ  ГЇГ® ГЇГ°ГЁГ·ГЁГ­Г Г¬:")
+                imgui.BulletText(u8"ГЋГІГ±ГіГІГ±ГІГўГЁГҐ Г¦ГЁГ«ГјГї")
+                imgui.BulletText(u8"Г“ГўГ®Г«ГјГ­ГҐГ­ГЁГҐ Г±Г® Г±ГІГ®Г°Г®Г­Г» Г”ГЃГђ")
+                imgui.BulletText(u8"Г‚Г Г°Г­/ГЎГ Г­ ГЇГ® ГўГЁГ­ГҐ ГЁ Г®ГёГЁГЎГЄГҐ Г Г¤Г¬ГЁГ­Г ")
+                imgui.TextWrapped(u8"Г‚ГЋГ‘Г‘Г’ГЂГЌГЂГ‚Г‹Г€Г‚ГЂГ…Г’Г‘Гџ ГЌГЂ Г„ГЋГ‹Г†ГЌГЋГ‘Г’Гњ.")
+                imgui.TextWrapped(u8"9.3 Г…Г±Г«ГЁ Г­Г ГЄГ Г§Г Г­ГЁГҐ ГўГ»Г¤Г Г­Г® ГЇГ® Г®ГёГЁГЎГЄГҐ Г Г¤Г¬ГЁГ­ГЁГ±ГІГ°Г ГІГ®Г°Г  ГЁ Г±Г®ГІГ°ГіГ¤Г­ГЁГЄ, ГіГўГ®Г«ГҐГ­Г­Г»Г© Г±ГЁГ±ГІГҐГ¬Г®Г©, Г±Г¬Г®ГЈ ГЅГІГ® Г¤Г®ГЄГ Г§Г ГІГј В— ГўГ®Г±Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬.")
+                imgui.TextWrapped(u8"9.4 Г…Г±Г«ГЁ ГЇГ® Г­Г Г°ГіГёГҐГ­ГЁГѕ ГЁГЈГ°Г®ГЄГ  Г®Г­ ГЇГ®Г«ГіГ·ГЁГ« Г­Г ГЄГ Г§Г Г­ГЁГҐ В— Г°Г Г­ГЈ Г­ГҐ ГўГ®Г±Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГІГ±Гї.")
             end
-            if imgui.CollapsingHeader(u8"11. Наказания/штрафы 9-кам") then
-                imgui.TextWrapped(u8"10.1 За неадекватное поведение: $35,000,000")
-                imgui.TextWrapped(u8"10.2 Варн/бан: $35,000,000/$150,000,000")
-                imgui.TextWrapped(u8"10.3 Снять выговор: $30,000,000")
-                imgui.TextWrapped(u8"10.4 Мут за неадеквата: $75,000,000 (от 30 минут)")
-                imgui.TextWrapped(u8"10.5 Писать в /d: $25,000,000")
-                imgui.TextWrapped(u8"10.6 Неадекватное увольнение человека: $100,000,000 + извинение перед человеком")
-                imgui.TextWrapped(u8"10.7 Неадекватная выдача выговора: $30,000,000")
-                imgui.TextWrapped(u8"10.8 Неадекватная выдача мута: $10,000,000")
-                imgui.TextWrapped(u8"10.9 Выгнал пациента из больницы не по правилам (НПБ): $5,000,000")
-                imgui.TextWrapped(u8"10.10 Деморган (от 60 минут) штраф: $30,000,000")
-                imgui.TextWrapped(u8"10.11 Неадекватное поведение/оскорбления в группе больницы (ТГ): $100,000,000")
-                imgui.TextWrapped(u8"10.12 Отсылки на сторонние сайты, реклама чего-либо не связанного с игрой и запрещённого: $250,000,000")
-                imgui.TextWrapped(u8"11. Не взятие ТГ/ДС у человека при бронировании: ВЫГОВОР + ШТРАФ 100КК")
-                imgui.TextWrapped(u8"За невыплату штрафа даётся ЧС орги.")
+            if imgui.CollapsingHeader(u8"11. ГЌГ ГЄГ Г§Г Г­ГЁГї/ГёГІГ°Г ГґГ» 9-ГЄГ Г¬") then
+                imgui.TextWrapped(u8"10.1 Г‡Г  Г­ГҐГ Г¤ГҐГЄГўГ ГІГ­Г®ГҐ ГЇГ®ГўГҐГ¤ГҐГ­ГЁГҐ: $35,000,000")
+                imgui.TextWrapped(u8"10.2 Г‚Г Г°Г­/ГЎГ Г­: $35,000,000/$150,000,000")
+                imgui.TextWrapped(u8"10.3 Г‘Г­ГїГІГј ГўГ»ГЈГ®ГўГ®Г°: $30,000,000")
+                imgui.TextWrapped(u8"10.4 ГЊГіГІ Г§Г  Г­ГҐГ Г¤ГҐГЄГўГ ГІГ : $75,000,000 (Г®ГІ 30 Г¬ГЁГ­ГіГІ)")
+                imgui.TextWrapped(u8"10.5 ГЏГЁГ±Г ГІГј Гў /d: $25,000,000")
+                imgui.TextWrapped(u8"10.6 ГЌГҐГ Г¤ГҐГЄГўГ ГІГ­Г®ГҐ ГіГўГ®Г«ГјГ­ГҐГ­ГЁГҐ Г·ГҐГ«Г®ГўГҐГЄГ : $100,000,000 + ГЁГ§ГўГЁГ­ГҐГ­ГЁГҐ ГЇГҐГ°ГҐГ¤ Г·ГҐГ«Г®ГўГҐГЄГ®Г¬")
+                imgui.TextWrapped(u8"10.7 ГЌГҐГ Г¤ГҐГЄГўГ ГІГ­Г Гї ГўГ»Г¤Г Г·Г  ГўГ»ГЈГ®ГўГ®Г°Г : $30,000,000")
+                imgui.TextWrapped(u8"10.8 ГЌГҐГ Г¤ГҐГЄГўГ ГІГ­Г Гї ГўГ»Г¤Г Г·Г  Г¬ГіГІГ : $10,000,000")
+                imgui.TextWrapped(u8"10.9 Г‚Г»ГЈГ­Г Г« ГЇГ Г¶ГЁГҐГ­ГІГ  ГЁГ§ ГЎГ®Г«ГјГ­ГЁГ¶Г» Г­ГҐ ГЇГ® ГЇГ°Г ГўГЁГ«Г Г¬ (ГЌГЏГЃ): $5,000,000")
+                imgui.TextWrapped(u8"10.10 Г„ГҐГ¬Г®Г°ГЈГ Г­ (Г®ГІ 60 Г¬ГЁГ­ГіГІ) ГёГІГ°Г Гґ: $30,000,000")
+                imgui.TextWrapped(u8"10.11 ГЌГҐГ Г¤ГҐГЄГўГ ГІГ­Г®ГҐ ГЇГ®ГўГҐГ¤ГҐГ­ГЁГҐ/Г®Г±ГЄГ®Г°ГЎГ«ГҐГ­ГЁГї Гў ГЈГ°ГіГЇГЇГҐ ГЎГ®Г«ГјГ­ГЁГ¶Г» (Г’Гѓ): $100,000,000")
+                imgui.TextWrapped(u8"10.12 ГЋГІГ±Г»Г«ГЄГЁ Г­Г  Г±ГІГ®Г°Г®Г­Г­ГЁГҐ Г±Г Г©ГІГ», Г°ГҐГЄГ«Г Г¬Г  Г·ГҐГЈГ®-Г«ГЁГЎГ® Г­ГҐ Г±ГўГїГ§Г Г­Г­Г®ГЈГ® Г± ГЁГЈГ°Г®Г© ГЁ Г§Г ГЇГ°ГҐГ№ВёГ­Г­Г®ГЈГ®: $250,000,000")
+                imgui.TextWrapped(u8"11. ГЌГҐ ГўГ§ГїГІГЁГҐ Г’Гѓ/Г„Г‘ Гі Г·ГҐГ«Г®ГўГҐГЄГ  ГЇГ°ГЁ ГЎГ°Г®Г­ГЁГ°Г®ГўГ Г­ГЁГЁ: Г‚Г›ГѓГЋГ‚ГЋГђ + ГГ’ГђГЂГ” 100ГЉГЉ")
+                imgui.TextWrapped(u8"Г‡Г  Г­ГҐГўГ»ГЇГ«Г ГІГі ГёГІГ°Г ГґГ  Г¤Г ВёГІГ±Гї Г—Г‘ Г®Г°ГЈГЁ.")
             end
         elseif selectedTab[0] == 4 then
-            if imgui.CollapsingHeader(u8"7. Ценовая политика для 6 рангов") then
-                imgui.TextWrapped(u8"10 дней: $20,000,000 ($2,000,000/день); ($4,000,000 на казну орги)")
-                imgui.TextWrapped(u8"20 дней: $35,000,000 ($1,750,000/день); ($7,000,000 на казну орги)")
-                imgui.TextWrapped(u8"30 дней: $45,000,000 ($1,500,000/день); ($9,000,000 на казну орги)")
-                imgui.TextWrapped(u8"60 дней: $75,000,000 ($1,250,000/день); ($15,000,000 на казну орги)")
+            if imgui.CollapsingHeader(u8"7. Г–ГҐГ­Г®ГўГ Гї ГЇГ®Г«ГЁГІГЁГЄГ  Г¤Г«Гї 6 Г°Г Г­ГЈГ®Гў") then
+                imgui.TextWrapped(u8"10 Г¤Г­ГҐГ©: $20,000,000 ($2,000,000/Г¤ГҐГ­Гј); ($4,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"20 Г¤Г­ГҐГ©: $35,000,000 ($1,750,000/Г¤ГҐГ­Гј); ($7,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"30 Г¤Г­ГҐГ©: $45,000,000 ($1,500,000/Г¤ГҐГ­Гј); ($9,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"60 Г¤Г­ГҐГ©: $75,000,000 ($1,250,000/Г¤ГҐГ­Гј); ($15,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
             end
-            if imgui.CollapsingHeader(u8"8. Ценовая политика для 7-х рангов") then
-                imgui.TextWrapped(u8"10 дней: $30,000,000 ($3,000,000/день); ($9,000,000 на казну орги)")
-                imgui.TextWrapped(u8"20 дней: $55,000,000 ($2,750,000/день); ($16,500,000 на казну орги)")
-                imgui.TextWrapped(u8"30 дней: $75,000,000 ($2,500,000/день); ($22,500,000 на казну орги)")
-                imgui.TextWrapped(u8"60 дней: $135,000,000 ($2,250,000/день); ($40,500,000 на казну орги)")
+            if imgui.CollapsingHeader(u8"8. Г–ГҐГ­Г®ГўГ Гї ГЇГ®Г«ГЁГІГЁГЄГ  Г¤Г«Гї 7-Гµ Г°Г Г­ГЈГ®Гў") then
+                imgui.TextWrapped(u8"10 Г¤Г­ГҐГ©: $30,000,000 ($3,000,000/Г¤ГҐГ­Гј); ($9,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"20 Г¤Г­ГҐГ©: $55,000,000 ($2,750,000/Г¤ГҐГ­Гј); ($16,500,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"30 Г¤Г­ГҐГ©: $75,000,000 ($2,500,000/Г¤ГҐГ­Гј); ($22,500,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"60 Г¤Г­ГҐГ©: $135,000,000 ($2,250,000/Г¤ГҐГ­Гј); ($40,500,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
             end
-            if imgui.CollapsingHeader(u8"9. Ценовая политика для 8 ранга") then
-                imgui.TextWrapped(u8"30 дней: $150,000,000 ($5,000,000/день); ($60,000,000 на казну орги)")
-                imgui.TextWrapped(u8"60 дней: $270,000,000 ($4,500,000/день); ($108,000,000 на казну орги)")
+            if imgui.CollapsingHeader(u8"9. Г–ГҐГ­Г®ГўГ Гї ГЇГ®Г«ГЁГІГЁГЄГ  Г¤Г«Гї 8 Г°Г Г­ГЈГ ") then
+                imgui.TextWrapped(u8"30 Г¤Г­ГҐГ©: $150,000,000 ($5,000,000/Г¤ГҐГ­Гј); ($60,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
+                imgui.TextWrapped(u8"60 Г¤Г­ГҐГ©: $270,000,000 ($4,500,000/Г¤ГҐГ­Гј); ($108,000,000 Г­Г  ГЄГ Г§Г­Гі Г®Г°ГЈГЁ)")
             end
-            if imgui.CollapsingHeader(u8"3. Платные услуги") then
-                imgui.TextWrapped(u8"3.1 Заместитель больницы в праве продавать услуги:")
-                imgui.BulletText(u8"Рабочая виза Вайс-Сити")
-                imgui.BulletText(u8"Снятие выговора")
-                imgui.BulletText(u8"Снятие ЧС")
-                imgui.TextWrapped(u8"3.2 Ценовая политика данных услуг:")
-                imgui.BulletText(u8"Рабочая виза Вайс-Сити: $5,000,000 (Получаете 100% от продажи)")
-                imgui.BulletText(u8"Снятие выговора: $10,000,000 (Получаете 50% от продажи)")
-                imgui.BulletText(u8"Снятие ЧС: от $20,000,000 до $100,000,000 (смотрите на причину ЧС'а, Получаете 50%)")
-                imgui.TextWrapped(u8"3.3 Любой руководитель при снятии выговора, ЧС'а должен предоставить отчет о пополнении счета организации.")
+            if imgui.CollapsingHeader(u8"3. ГЏГ«Г ГІГ­Г»ГҐ ГіГ±Г«ГіГЈГЁ") then
+                imgui.TextWrapped(u8"3.1 Г‡Г Г¬ГҐГ±ГІГЁГІГҐГ«Гј ГЎГ®Г«ГјГ­ГЁГ¶Г» Гў ГЇГ°Г ГўГҐ ГЇГ°Г®Г¤Г ГўГ ГІГј ГіГ±Г«ГіГЈГЁ:")
+                imgui.BulletText(u8"ГђГ ГЎГ®Г·Г Гї ГўГЁГ§Г  Г‚Г Г©Г±-Г‘ГЁГІГЁ")
+                imgui.BulletText(u8"Г‘Г­ГїГІГЁГҐ ГўГ»ГЈГ®ГўГ®Г°Г ")
+                imgui.BulletText(u8"Г‘Г­ГїГІГЁГҐ Г—Г‘")
+                imgui.TextWrapped(u8"3.2 Г–ГҐГ­Г®ГўГ Гї ГЇГ®Г«ГЁГІГЁГЄГ  Г¤Г Г­Г­Г»Гµ ГіГ±Г«ГіГЈ:")
+                imgui.BulletText(u8"ГђГ ГЎГ®Г·Г Гї ГўГЁГ§Г  Г‚Г Г©Г±-Г‘ГЁГІГЁ: $5,000,000 (ГЏГ®Г«ГіГ·Г ГҐГІГҐ 100% Г®ГІ ГЇГ°Г®Г¤Г Г¦ГЁ)")
+                imgui.BulletText(u8"Г‘Г­ГїГІГЁГҐ ГўГ»ГЈГ®ГўГ®Г°Г : $10,000,000 (ГЏГ®Г«ГіГ·Г ГҐГІГҐ 50% Г®ГІ ГЇГ°Г®Г¤Г Г¦ГЁ)")
+                imgui.BulletText(u8"Г‘Г­ГїГІГЁГҐ Г—Г‘: Г®ГІ $20,000,000 Г¤Г® $100,000,000 (Г±Г¬Г®ГІГ°ГЁГІГҐ Г­Г  ГЇГ°ГЁГ·ГЁГ­Гі Г—Г‘'Г , ГЏГ®Г«ГіГ·Г ГҐГІГҐ 50%)")
+                imgui.TextWrapped(u8"3.3 Г‹ГѕГЎГ®Г© Г°ГіГЄГ®ГўГ®Г¤ГЁГІГҐГ«Гј ГЇГ°ГЁ Г±Г­ГїГІГЁГЁ ГўГ»ГЈГ®ГўГ®Г°Г , Г—Г‘'Г  Г¤Г®Г«Г¦ГҐГ­ ГЇГ°ГҐГ¤Г®Г±ГІГ ГўГЁГІГј Г®ГІГ·ГҐГІ Г® ГЇГ®ГЇГ®Г«Г­ГҐГ­ГЁГЁ Г±Г·ГҐГІГ  Г®Г°ГЈГ Г­ГЁГ§Г Г¶ГЁГЁ.")
             end
         end
         imgui.EndChild()
@@ -432,10 +432,10 @@ function main()
     loadInvites()
     sampRegisterChatCommand('jmenu', function() WinState[0] = not WinState[0] end)
     
-    sampAddChatMessage("{FFFF00}Скрипт JeffersonNorma: {00FF00}загружена!", -1)
-    sampAddChatMessage("{FFFF00}Команда для запуска: {00FF00}/jmenu", -1)
-    sampAddChatMessage("{FFFF00}Автор скрипта: {00FF00}Romeo_Fray", -1)
-    sampAddChatMessage("{FFFF00}Нашли баги, обращайтесь в тг: {00FF00}@CandyLoveFanat", -1)
+    sampAddChatMessage("{FFFF00}Г‘ГЄГ°ГЁГЇГІ JeffersonNorma: {00FF00}Г§Г ГЈГ°ГіГ¦ГҐГ­Г !", -1)
+    sampAddChatMessage("{FFFF00}ГЉГ®Г¬Г Г­Г¤Г  Г¤Г«Гї Г§Г ГЇГіГ±ГЄГ : {00FF00}/jmenu", -1)
+    sampAddChatMessage("{FFFF00}ГЂГўГІГ®Г° Г±ГЄГ°ГЁГЇГІГ : {00FF00}Romeo_Fray", -1)
+    sampAddChatMessage("{FFFF00}ГЌГ ГёГ«ГЁ ГЎГ ГЈГЁ, Г®ГЎГ°Г Г№Г Г©ГІГҐГ±Гј Гў ГІГЈ: {00FF00}@CandyLoveFanat", -1)
     wait(-1)
 end
 

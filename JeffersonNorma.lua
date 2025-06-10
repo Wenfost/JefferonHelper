@@ -210,6 +210,7 @@ sampRegisterChatCommand("setnorma", function(amount)
 end)
 
 
+
 imgui.OnFrame(
     function() return WinState[0] end,
     function(player)
@@ -218,17 +219,17 @@ imgui.OnFrame(
         imgui.SetNextWindowSize(imgui.ImVec2(650, 490), imgui.Cond.Always)
         imgui.Begin(u8"JeffersonNorma", WinState, imgui.WindowFlags.NoResize)
         imgui.BeginChild("LeftPanel", imgui.ImVec2(150, 0), true)
-        imgui.SetCursorPosX(10)
-        if imgui.Button(u8"Главное меню", imgui.ImVec2(150, 40)) then selectedTab[0] = 0 end
-        imgui.SetCursorPosX(10)
-        if imgui.Button(u8"Инвайты", imgui.ImVec2(140, 40)) then selectedTab[0] = 1 end
-        imgui.SetCursorPosX(10)
-        if imgui.Button(u8"Продажа ранга", imgui.ImVec2(140, 40)) then selectedTab[0] = 2 end
-        imgui.SetCursorPosX(10)
-        if imgui.Button(u8"Устав", imgui.ImVec2(140, 40)) then selectedTab[0] = 3 end
-        imgui.SetCursorPosX(10)
-        if imgui.Button(u8"Ценовая политика", imgui.ImVec2(140, 40)) then selectedTab[0] = 4 end
-        imgui.SetCursorPosX(10)
+        imgui.SetCursorPosX(12)
+        if imgui.Button(u8"Главное меню", imgui.ImVec2(130, 40)) then selectedTab[0] = 0 end
+        imgui.SetCursorPosX(12)
+        if imgui.Button(u8"Инвайты", imgui.ImVec2(130, 40)) then selectedTab[0] = 1 end
+        imgui.SetCursorPosX(12)
+        if imgui.Button(u8"Продажа ранга", imgui.ImVec2(130, 40)) then selectedTab[0] = 2 end
+        imgui.SetCursorPosX(12)
+        if imgui.Button(u8"Устав", imgui.ImVec2(130, 40)) then selectedTab[0] = 3 end
+        imgui.SetCursorPosX(12)
+        if imgui.Button(u8"Ценовая политика", imgui.ImVec2(130, 40)) then selectedTab[0] = 4 end
+        imgui.SetCursorPosX(12)
         imgui.EndChild()
         imgui.SameLine()
         imgui.BeginChild("ContentPanel", imgui.ImVec2(0, 0), true)
@@ -430,7 +431,7 @@ end
 function main()
     loadInvites()
     sampRegisterChatCommand('jmenu', function() WinState[0] = not WinState[0] end)
-      sampAddChatMessage("{FFFF00}Скрипт JeffersonNorma: {00FF00}Версия 1.1", -1)
+    sampAddChatMessage("{FFFF00}Скрипт JeffersonNorma: {00FF00}ОБНОВЛЕНИЕ РАБОТАЕТ, ОУУУ ЕС", -1)
     sampAddChatMessage("{FFFF00}Скрипт JeffersonNorma: {00FF00}загружена!", -1)
     sampAddChatMessage("{FFFF00}Команда для запуска: {00FF00}/jmenu", -1)
     sampAddChatMessage("{FFFF00}Автор скрипта: {00FF00}Romeo_Fray", -1)
@@ -439,119 +440,69 @@ function main()
 end
 
 
-local function checkUpdate()
-    local currentVersion = "1.0" -- Текущая версия скрипта (нужно задать вручную)
-    local repoUrl = "https://raw.githubusercontent.com/ваш_пользователь/ваш_репозиторий/main/JeffersonHelper.lua"
-    local versionUrl = "https://raw.githubusercontent.com/ваш_пользователь/ваш_репозиторий/main/version.txt"
-
-    -- Получаем версию с GitHub
-    local response = {}
-    local _, status = http.request{
-        url = versionUrl,
-        sink = ltn12.sink.table(response)
-    }
-    if status == 200 then
-        local latestVersion = table.concat(response)
-        if latestVersion > currentVersion then
-            sampAddChatMessage("{FFFF00}Найдена новая версия скрипта: " .. latestVersion, -1)
-            -- Скачиваем обновление
-            local file = io.open("JeffersonNorma_new.lua", "w")
-            if file then
-                http.request{
-                    url = repoUrl,
-                    sink = ltn12.sink.file(file)
-                }
-                file:close()
-                -- Перемещаем новый файл и перезапускаем
-                os.rename("JeffersonNorma_new.lua", "JeffersonNorma.lua")
-                sampAddChatMessage("{00FF00}Скрипт обновлён. Перезапуск...", -1)
-                -- Здесь нужен механизм перезапуска (зависит от среды MoonLoader)
-                os.exit() -- Пример, требует доработки
-            end
-        else
-            sampAddChatMessage("{00FFAA}Скрипт уже актуален.", -1)
-        end
-    end
-end
-
--- Вызов проверки при запуске
-checkUpdate()
-
 
 function theme()
+    imgui.SwitchContext()
     local style = imgui.GetStyle()
-    local colors = style.Colors
-    style.Alpha = 1
-    style.WindowPadding = imgui.ImVec2(15.00, 15.00)
-    style.WindowRounding = 0
-    style.WindowBorderSize = 1
-    style.WindowMinSize = imgui.ImVec2(32.00, 32.00)
-    style.WindowTitleAlign = imgui.ImVec2(0.50, 0.50)
-    style.ChildRounding = 0
-    style.ChildBorderSize = 1
-    style.PopupRounding = 0
-    style.PopupBorderSize = 1
-    style.FramePadding = imgui.ImVec2(8.00, 7.00)
-    style.FrameRounding = 0
-    style.FrameBorderSize = 0
-    style.ItemSpacing = imgui.ImVec2(8.00, 8.00)
-    style.ItemInnerSpacing = imgui.ImVec2(10.00, 6.00)
-    style.IndentSpacing = 25
-    style.ScrollbarSize = 13
-    style.ScrollbarRounding = 0
-    style.GrabMinSize = 6
-    style.GrabRounding = 0
-    style.TabRounding = 0
-    style.ButtonTextAlign = imgui.ImVec2(0.50, 0.50)
-    style.SelectableTextAlign = imgui.ImVec2(0.00, 0.00)
-    colors[imgui.Col.Text] = imgui.ImVec4(1.00, 1.00, 1.00, 1.00)
-    colors[imgui.Col.TextDisabled] = imgui.ImVec4(0.60, 0.56, 0.56, 1.00)
-    colors[imgui.Col.WindowBg] = imgui.ImVec4(0.16, 0.16, 0.16, 1.00)
-    colors[imgui.Col.ChildBg] = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
-    colors[imgui.Col.PopupBg] = imgui.ImVec4(0.26, 0.26, 0.26, 1.00)
-    colors[imgui.Col.Border] = imgui.ImVec4(0.43, 0.43, 0.50, 0.50)
-    colors[imgui.Col.BorderShadow] = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
-    colors[imgui.Col.FrameBg] = imgui.ImVec4(0.20, 0.20, 0.20, 1.00)
-    colors[imgui.Col.FrameBgHovered] = imgui.ImVec4(0.33, 0.32, 0.32, 1.00)
-    colors[imgui.Col.FrameBgActive] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.TitleBg] = imgui.ImVec4(0.22, 0.22, 0.22, 1.00)
-    colors[imgui.Col.TitleBgActive] = imgui.ImVec4(0.23, 0.23, 0.23, 1.00)
-    colors[imgui.Col.TitleBgCollapsed] = imgui.ImVec4(0.00, 0.00, 0.00, 0.51)
-    colors[imgui.Col.MenuBarBg] = imgui.ImVec4(0.14, 0.14, 0.14, 1.00)
-    colors[imgui.Col.ScrollbarBg] = imgui.ImVec4(0.19, 0.19, 0.19, 1.00)
-    colors[imgui.Col.ScrollbarGrab] = imgui.ImVec4(0.23, 0.23, 0.23, 1.00)
-    colors[imgui.Col.ScrollbarGrabHovered] = imgui.ImVec4(0.41, 0.41, 0.41, 1.00)
-    colors[imgui.Col.ScrollbarGrabActive] = imgui.ImVec4(0.51, 0.51, 0.51, 1.00)
-    colors[imgui.Col.CheckMark] = imgui.ImVec4(0.42, 0.43, 0.43, 1.00)
-    colors[imgui.Col.SliderGrab] = imgui.ImVec4(0.42, 0.43, 0.43, 1.00)
-    colors[imgui.Col.SliderGrabActive] = imgui.ImVec4(0.51, 0.51, 0.51, 1.00)
-    colors[imgui.Col.Button] = imgui.ImVec4(0.26, 0.26, 0.26, 1.00)
-    colors[imgui.Col.ButtonHovered] = imgui.ImVec4(0.32, 0.32, 0.32, 1.00)
-    colors[imgui.Col.ButtonActive] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.Header] = imgui.ImVec4(0.26, 0.26, 0.26, 1.00)
-    colors[imgui.Col.HeaderHovered] = imgui.ImVec4(0.33, 0.32, 0.32, 1.00)
-    colors[imgui.Col.HeaderActive] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.Separator] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.SeparatorHovered] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.SeparatorActive] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.ResizeGrip] = imgui.ImVec4(0.22, 0.22, 0.22, 1.00)
-    colors[imgui.Col.ResizeGripHovered] = imgui.ImVec4(0.22, 0.22, 0.22, 1.00)
-    colors[imgui.Col.ResizeGripActive] = imgui.ImVec4(0.33, 0.32, 0.32, 1.00)
-    colors[imgui.Col.Tab] = imgui.ImVec4(0.26, 0.26, 0.26, 1.00)
-    colors[imgui.Col.TabHovered] = imgui.ImVec4(0.33, 0.32, 0.32, 1.00)
-    colors[imgui.Col.TabActive] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.TabUnfocused] = imgui.ImVec4(0.26, 0.26, 0.26, 1.00)
-    colors[imgui.Col.TabUnfocusedActive] = imgui.ImVec4(0.38, 0.38, 0.38, 1.00)
-    colors[imgui.Col.PlotLines] = imgui.ImVec4(0.61, 0.61, 0.61, 1.00)
-    colors[imgui.Col.PlotLinesHovered] = imgui.ImVec4(1.00, 0.43, 0.35, 1.00)
-    colors[imgui.Col.PlotHistogram] = imgui.ImVec4(0.90, 0.70, 0.00, 1.00)
-    colors[imgui.Col.PlotHistogramHovered] = imgui.ImVec4(1.00, 0.60, 0.00, 1.00)
-    colors[imgui.Col.TextSelectedBg] = imgui.ImVec4(0.33, 0.33, 0.33, 0.50)
-    colors[imgui.Col.DragDropTarget] = imgui.ImVec4(1.00, 1.00, 0.00, 0.90)
-    colors[imgui.Col.NavHighlight] = imgui.ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[imgui.Col.NavWindowingHighlight] = imgui.ImVec4(1.00, 1.00, 1.00, 0.70)
-    colors[imgui.Col.NavWindowingDimBg] = imgui.ImVec4(0.80, 0.80, 0.80, 0.20)
-    colors[imgui.Col.ModalWindowDimBg] = imgui.ImVec4(0.80, 0.80, 0.80, 0.35)
+  
+    style.WindowPadding = imgui.ImVec2(15, 15)
+    style.WindowRounding = 10.0
+    style.ChildRounding = 6.0
+    style.FramePadding = imgui.ImVec2(8, 7)
+    style.FrameRounding = 8.0
+    style.ItemSpacing = imgui.ImVec2(8, 8)
+    style.ItemInnerSpacing = imgui.ImVec2(10, 6)
+    style.IndentSpacing = 25.0
+    style.ScrollbarSize = 13.0
+    style.ScrollbarRounding = 12.0
+    style.GrabMinSize = 10.0
+    style.GrabRounding = 6.0
+    style.PopupRounding = 8
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ButtonTextAlign = imgui.ImVec2(0.5, 0.5)
+
+    style.Colors[imgui.Col.Text]                   = imgui.ImVec4(0.90, 0.90, 0.93, 1.00)
+    style.Colors[imgui.Col.TextDisabled]           = imgui.ImVec4(0.40, 0.40, 0.45, 1.00)
+    style.Colors[imgui.Col.WindowBg]               = imgui.ImVec4(0.12, 0.12, 0.14, 1.00)
+    style.Colors[imgui.Col.ChildBg]                = imgui.ImVec4(0.18, 0.20, 0.22, 0.30)
+    style.Colors[imgui.Col.PopupBg]                = imgui.ImVec4(0.13, 0.13, 0.15, 1.00)
+    style.Colors[imgui.Col.Border]                 = imgui.ImVec4(0.30, 0.30, 0.35, 1.00)
+    style.Colors[imgui.Col.BorderShadow]           = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
+    style.Colors[imgui.Col.FrameBg]                = imgui.ImVec4(0.18, 0.18, 0.20, 1.00)
+    style.Colors[imgui.Col.FrameBgHovered]         = imgui.ImVec4(0.25, 0.25, 0.28, 1.00)
+    style.Colors[imgui.Col.FrameBgActive]          = imgui.ImVec4(0.30, 0.30, 0.34, 1.00)
+    style.Colors[imgui.Col.TitleBg]                = imgui.ImVec4(0.15, 0.15, 0.17, 1.00)
+    style.Colors[imgui.Col.TitleBgCollapsed]       = imgui.ImVec4(0.10, 0.10, 0.12, 1.00)
+    style.Colors[imgui.Col.TitleBgActive]          = imgui.ImVec4(0.15, 0.15, 0.17, 1.00)
+    style.Colors[imgui.Col.MenuBarBg]              = imgui.ImVec4(0.12, 0.12, 0.14, 1.00)
+    style.Colors[imgui.Col.ScrollbarBg]            = imgui.ImVec4(0.12, 0.12, 0.14, 1.00)
+    style.Colors[imgui.Col.ScrollbarGrab]          = imgui.ImVec4(0.30, 0.30, 0.35, 1.00)
+    style.Colors[imgui.Col.ScrollbarGrabHovered]   = imgui.ImVec4(0.40, 0.40, 0.45, 1.00)
+    style.Colors[imgui.Col.ScrollbarGrabActive]    = imgui.ImVec4(0.50, 0.50, 0.55, 1.00)
+    style.Colors[imgui.Col.CheckMark]              = imgui.ImVec4(0.70, 0.70, 0.90, 1.00)
+    style.Colors[imgui.Col.SliderGrab]             = imgui.ImVec4(0.70, 0.70, 0.90, 1.00)
+    style.Colors[imgui.Col.SliderGrabActive]       = imgui.ImVec4(0.80, 0.80, 0.90, 1.00)
+    style.Colors[imgui.Col.Button]                 = imgui.ImVec4(0.18, 0.18, 0.20, 1.00)
+    style.Colors[imgui.Col.ButtonHovered]          = imgui.ImVec4(0.60, 0.60, 0.90, 1.00)
+    style.Colors[imgui.Col.ButtonActive]           = imgui.ImVec4(0.28, 0.56, 0.96, 1.00)
+    style.Colors[imgui.Col.Header]                 = imgui.ImVec4(0.20, 0.20, 0.23, 1.00)
+    style.Colors[imgui.Col.HeaderHovered]          = imgui.ImVec4(0.25, 0.25, 0.28, 1.00)
+    style.Colors[imgui.Col.HeaderActive]           = imgui.ImVec4(0.30, 0.30, 0.34, 1.00)
+    style.Colors[imgui.Col.Separator]              = imgui.ImVec4(0.40, 0.40, 0.45, 1.00)
+    style.Colors[imgui.Col.SeparatorHovered]       = imgui.ImVec4(0.50, 0.50, 0.55, 1.00)
+    style.Colors[imgui.Col.SeparatorActive]        = imgui.ImVec4(0.60, 0.60, 0.65, 1.00)
+    style.Colors[imgui.Col.ResizeGrip]             = imgui.ImVec4(0.20, 0.20, 0.23, 1.00)
+    style.Colors[imgui.Col.ResizeGripHovered]      = imgui.ImVec4(0.25, 0.25, 0.28, 1.00)
+    style.Colors[imgui.Col.ResizeGripActive]       = imgui.ImVec4(0.30, 0.30, 0.34, 1.00)
+    style.Colors[imgui.Col.PlotLines]              = imgui.ImVec4(0.61, 0.61, 0.64, 1.00)
+    style.Colors[imgui.Col.PlotLinesHovered]       = imgui.ImVec4(0.70, 0.70, 0.75, 1.00)
+    style.Colors[imgui.Col.PlotHistogram]          = imgui.ImVec4(0.61, 0.61, 0.64, 1.00)
+    style.Colors[imgui.Col.PlotHistogramHovered]   = imgui.ImVec4(0.70, 0.70, 0.75, 1.00)
+    style.Colors[imgui.Col.TextSelectedBg]         = imgui.ImVec4(0.30, 0.30, 0.34, 1.00)
+    style.Colors[imgui.Col.ModalWindowDimBg]       = imgui.ImVec4(0.10, 0.10, 0.12, 0.80)
+    style.Colors[imgui.Col.Tab]                    = imgui.ImVec4(0.18, 0.20, 0.22, 1.00)
+    style.Colors[imgui.Col.TabHovered]             = imgui.ImVec4(0.60, 0.60, 0.90, 1.00)
+    style.Colors[imgui.Col.TabActive]              = imgui.ImVec4(0.28, 0.56, 0.96, 1.00)
 end
 
 imgui.OnInitialize(function()
